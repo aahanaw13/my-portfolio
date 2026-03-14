@@ -1,0 +1,200 @@
+/* ── Design Tokens (CSS Variables) ── */
+:root {
+  --cream: #FFF8F0;
+  --warmblack: #2D2420;
+  --clay: #C4775B;
+  --sage: #7A9E7E;
+  --sand: #E8D5C0;
+  --lavender: #B8A9C9;
+  --sky: #89B4C8;
+}
+
+
+/* ── Base Reset & Defaults ── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--clay) var(--cream);
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--warmblack);
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+}
+
+
+/* ── Grain Overlay (adds warmth & texture) ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+
+/*ANIMATIONS*/
+
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Staggered Children (for grid cards) ── */
+.stagger-children .reveal:nth-child(1) { transition-delay: 0.05s; }
+.stagger-children .reveal:nth-child(2) { transition-delay: 0.12s; }
+.stagger-children .reveal:nth-child(3) { transition-delay: 0.19s; }
+.stagger-children .reveal:nth-child(4) { transition-delay: 0.26s; }
+.stagger-children .reveal:nth-child(5) { transition-delay: 0.33s; }
+.stagger-children .reveal:nth-child(6) { transition-delay: 0.40s; }
+
+/* ── Decorative Blob Shapes ── */
+.blob-1 {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 60% 40% 50% 70% / 55% 60% 40% 50%;
+  opacity: 0.12;
+  filter: blur(60px);
+  animation: blobFloat 14s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 40% 60% 70% 30% / 50% 40% 60% 55%;
+  opacity: 0.10;
+  filter: blur(50px);
+  animation: blobFloat 18s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes blobFloat {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50%  { transform: translate(20px, -15px) rotate(8deg) scale(1.05); }
+  100% { transform: translate(-10px, 10px) rotate(-5deg) scale(0.97); }
+}
+
+/* ── Avatar Ring Gradient ── */
+.avatar-ring {
+  background: conic-gradient(var(--clay), var(--sage), var(--lavender), var(--sky), var(--clay));
+  padding: 4px;
+  border-radius: 50%;
+  animation: ringRotate 12s linear infinite;
+}
+
+@keyframes ringRotate {
+  100% { filter: hue-rotate(30deg); }
+}
+
+
+/* NAVIGATION*/
+
+/* ── Nav Link Underline Effect ── */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: var(--clay);
+  border-radius: 1px;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* ── Active Nav State ── */
+.nav-link.active {
+  color: var(--clay);
+}
+
+/* ── Mobile Menu ──
+   Transition is now handled via Tailwind classes directly on the element:
+   -translate-y-full (hidden) / translate-y-0 (open)
+   with transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)]
+*/
+
+
+/* COMPONENTS */
+
+/* ── Section Divider ── */
+.section-divider {
+  width: 64px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--clay), var(--sage));
+}
+
+/* ── Project Cards ── */
+.project-card {
+  background: white;
+  border: 1px solid #e8ddd4;
+  border-radius: 16px;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px -12px rgba(45, 36, 32, 0.12);
+}
+
+/* ── Tech Pill Tags ── */
+.tech-pill {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tech-pill:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Aspiration Quote Mark ── */
+.aspiration-quote {
+  position: relative;
+}
+
+.aspiration-quote::before {
+  content: '\201C';
+  font-family: 'DM Serif Display', serif;
+  font-size: 8rem;
+  line-height: 1;
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  color: var(--clay);
+  opacity: 0.15;
+}
